@@ -1,5 +1,6 @@
 package com.eshop.Ecommerce.Controller;
 
+import com.eshop.Ecommerce.Exception.ResourceNotFoundException;
 import com.eshop.Ecommerce.Model.Category;
 import com.eshop.Ecommerce.Service.CategoryService;
 import jakarta.validation.Valid;
@@ -35,26 +36,16 @@ public class CategoryController {
 
     //delete category
     @DeleteMapping("admin/categories/{categoriesId}")
-    public ResponseEntity<String> deleteCategory(@PathVariable Long categoriesId){
-        try{
+    public ResponseEntity<String> deleteCategory(@PathVariable Long categoriesId)  {
             String status=categoryService.deleteCategory(categoriesId);
             return ResponseEntity.ok(status);
-        }
-        catch (ResponseStatusException e){
-            return new ResponseEntity<>(e.getReason(),e.getStatusCode());
-        }
     }
 
     //updating category
     @PutMapping("/public/categories/{categoryId}")
     public ResponseEntity<String> updateCategory(@RequestBody Category category ,
-                                                 @PathVariable Long categoryId){
-        try{
+                                                 @PathVariable Long categoryId) {
             Category savedCategory=categoryService.updateCategory(categoryId,category);
             return ResponseEntity.ok("category updated successfully");
-        }
-        catch (ResponseStatusException e){
-            return new ResponseEntity<>(e.getReason(),e.getStatusCode());
-        }
     }
 }
