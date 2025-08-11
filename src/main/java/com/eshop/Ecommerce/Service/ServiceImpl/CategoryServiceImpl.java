@@ -40,12 +40,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void createCategory(Category category) {
+    public CategoryDTO createCategory(CategoryDTO  categoryDTO) {
+        Category category = modelMapper.map(categoryDTO, Category.class);
         Category savedCategory = categoryRepo.findByCategoryName(category.getCategoryName());
         if (savedCategory != null) {
             throw new APIException("Category with the name "+ category.getCategoryName()+ " already exists");
         }
-        categoryRepo.save(category);
+        Category newsavedCategory=categoryRepo.save(category);
+        return modelMapper.map(newsavedCategory, CategoryDTO.class);
     }
 
     @Override

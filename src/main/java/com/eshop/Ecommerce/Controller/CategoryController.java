@@ -2,6 +2,7 @@ package com.eshop.Ecommerce.Controller;
 
 import com.eshop.Ecommerce.Exception.ResourceNotFoundException;
 import com.eshop.Ecommerce.Model.Category;
+import com.eshop.Ecommerce.Payload.CategoryDTO;
 import com.eshop.Ecommerce.Payload.CategoryResponse;
 import com.eshop.Ecommerce.Service.CategoryService;
 import jakarta.validation.Valid;
@@ -30,9 +31,9 @@ public class CategoryController {
 
     //Put categories to db
     @PostMapping("/public/categories")
-    public ResponseEntity<String> createCategory(@Valid @RequestBody Category category){
-        categoryService.createCategory(category);
-        return new ResponseEntity<>("Category Created Successfully", HttpStatus.CREATED);
+    public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDTO){
+        CategoryDTO savedCategoryDTO= categoryService.createCategory(categoryDTO);
+        return new ResponseEntity<>(savedCategoryDTO, HttpStatus.CREATED);
     }
 
     //delete category
