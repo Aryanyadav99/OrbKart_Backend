@@ -8,7 +8,7 @@ import com.eshop.Ecommerce.Payload.CategoryResponse;
 import java.util.List;
 
 public interface CategoryService {
-    public CategoryResponse getAllCategory();
+    public CategoryResponse getAllCategory(Integer pageNumber, Integer pageSize);
     CategoryDTO createCategory(CategoryDTO categoryDTO);
     CategoryDTO deleteCategory(Long categoryId) throws ResourceNotFoundException;
 
