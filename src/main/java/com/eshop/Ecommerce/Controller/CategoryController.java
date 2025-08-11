@@ -1,5 +1,6 @@
 package com.eshop.Ecommerce.Controller;
 
+import com.eshop.Ecommerce.Configuration.AppConstants;
 import com.eshop.Ecommerce.Exception.ResourceNotFoundException;
 import com.eshop.Ecommerce.Model.Category;
 import com.eshop.Ecommerce.Payload.CategoryDTO;
@@ -25,8 +26,8 @@ public class CategoryController {
     //Get Mapping
     @GetMapping("/public/categories")
     public ResponseEntity<CategoryResponse> getAllCategories(
-            @RequestParam (name = "pageNumber") Integer pageNumber,
-            @RequestParam (name ="pageSize") Integer pageSize
+            @RequestParam (name = "pageNumber" , defaultValue = AppConstants.Page_Number ,required = false) Integer pageNumber,
+            @RequestParam (name ="pageSize",defaultValue = AppConstants.Page_Size,required = false) Integer pageSize
     ){
          CategoryResponse categories=categoryService.getAllCategory(pageNumber,pageSize);
         return ResponseEntity.ok(categories);
