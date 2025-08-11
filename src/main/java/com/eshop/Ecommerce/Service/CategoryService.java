@@ -10,7 +10,7 @@ import java.util.List;
 public interface CategoryService {
     public CategoryResponse getAllCategory();
     CategoryDTO createCategory(CategoryDTO categoryDTO);
-    String deleteCategory(Long categoryId) throws ResourceNotFoundException;
+    CategoryDTO deleteCategory(Long categoryId) throws ResourceNotFoundException;
 
-    Category updateCategory(Long categoryId, Category category) throws ResourceNotFoundException;
+    CategoryDTO updateCategory(Long categoryId, CategoryDTO categoryDTO) throws ResourceNotFoundException;
 }

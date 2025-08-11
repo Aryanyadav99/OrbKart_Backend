@@ -38,16 +38,18 @@ public class CategoryController {
 
     //delete category
     @DeleteMapping("admin/categories/{categoriesId}")
-    public ResponseEntity<String> deleteCategory(@PathVariable Long categoriesId)  {
-            String status=categoryService.deleteCategory(categoriesId);
-            return ResponseEntity.ok(status);
+    public ResponseEntity<CategoryDTO> deleteCategory(@PathVariable Long categoriesId)  {
+            CategoryDTO statusDTO=categoryService.deleteCategory(categoriesId);
+            return ResponseEntity.ok(statusDTO);
     }
 
     //updating category
     @PutMapping("/public/categories/{categoryId}")
-    public ResponseEntity<String> updateCategory(@RequestBody Category category ,
+    public ResponseEntity<CategoryDTO> updateCategory(@RequestBody CategoryDTO categoryDTO,
                                                  @PathVariable Long categoryId) {
-            Category savedCategory=categoryService.updateCategory(categoryId,category);
-            return ResponseEntity.ok("category updated successfully");
+
+            CategoryDTO savedCategoryDTO=categoryService.updateCategory(categoryId,categoryDTO);
+
+            return ResponseEntity.ok(savedCategoryDTO);
     }
 }
