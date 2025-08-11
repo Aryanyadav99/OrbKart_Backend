@@ -2,11 +2,12 @@ package com.eshop.Ecommerce.Service;
 
 import com.eshop.Ecommerce.Exception.ResourceNotFoundException;
 import com.eshop.Ecommerce.Model.Category;
+import com.eshop.Ecommerce.Payload.CategoryResponse;
 
 import java.util.List;
 
 public interface CategoryService {
-    public List<Category> getAllCategory();
+    public CategoryResponse getAllCategory();
     void createCategory(Category category);
     String deleteCategory(Long categoryId) throws ResourceNotFoundException;
 

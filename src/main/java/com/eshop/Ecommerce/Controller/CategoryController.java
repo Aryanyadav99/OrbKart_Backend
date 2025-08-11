@@ -2,6 +2,7 @@ package com.eshop.Ecommerce.Controller;
 
 import com.eshop.Ecommerce.Exception.ResourceNotFoundException;
 import com.eshop.Ecommerce.Model.Category;
+import com.eshop.Ecommerce.Payload.CategoryResponse;
 import com.eshop.Ecommerce.Service.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,8 @@ public class CategoryController {
 
     //Get Mapping
     @GetMapping("/public/categories")
-    public ResponseEntity<List<Category>> getAllCategories(){
-         List<Category> categories=categoryService.getAllCategory();
+    public ResponseEntity<CategoryResponse> getAllCategories(){
+         CategoryResponse categories=categoryService.getAllCategory();
         return ResponseEntity.ok(categories);
     }
 
