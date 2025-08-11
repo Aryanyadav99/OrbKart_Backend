@@ -9,6 +9,9 @@ import com.eshop.Ecommerce.Repositories.CategoryRepo;
 import com.eshop.Ecommerce.Service.CategoryService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -27,7 +30,11 @@ public class CategoryServiceImpl implements CategoryService {
     private ModelMapper modelMapper;
     @Override
     public CategoryResponse getAllCategory(Integer pageNumber, Integer pageSize){
-        List<Category> categories = categoryRepo.findAll();
+
+        Pageable pageDetail = PageRequest.of(pageNumber,pageSize);
+        Page<Category> categoryPage = categoryRepo.findAll(pageDetail);
+
+        List<Category> categories = categoryPage.getContent();
         if(categories.isEmpty()){
             throw new APIException("no category found");
         }
@@ -35,7 +42,14 @@ public class CategoryServiceImpl implements CategoryService {
                 .map(category -> modelMapper.map(category, CategoryDTO.class))
                 .toList();
         CategoryResponse categoryResponse = new CategoryResponse();
+
         categoryResponse.setContent(categoryDTOS);
+        categoryResponse.setTotalPages(categoryPage.getTotalPages());
+        categoryResponse.setTotalElements(categoryPage.getTotalElements());
+        categoryResponse.setPageNumber(pageNumber);
+        categoryResponse.setPageSize(pageSize);
+        categoryResponse.setLastPage(categoryPage.isLast());
+
         return categoryResponse;
     }
 
