@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -72,5 +73,22 @@ public class ProductServiceImpl implements ProductService {
         ProductResponse productResponse = new ProductResponse();
         productResponse.setProducts(productDTOS);
         return productResponse;
+    }
+
+    @Override
+    public ProductDTO updateProduct(Long productId, Product product) {
+        // get the product form db
+        Product existingproduct=productRepo.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("product","productId",productId));
+        //update the product info with new product
+        existingproduct.setProductName(product.getProductName());
+        existingproduct.setDescription(product.getDescription());
+        existingproduct.setQuantity(product.getQuantity());
+        existingproduct.setDiscount(product.getDiscount());
+        existingproduct.setPrice(product.getPrice());
+        existingproduct.setSpecialPrice(product.getSpecialPrice());
+        // save to db
+        Product savedProduct=productRepo.save(existingproduct);
+        return modelMapper.map(product,ProductDTO.class);
     }
 }
