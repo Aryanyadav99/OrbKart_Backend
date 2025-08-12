@@ -4,6 +4,7 @@ import com.eshop.Ecommerce.Model.Product;
 import com.eshop.Ecommerce.Payload.ProductDTO;
 import com.eshop.Ecommerce.Payload.ProductResponse;
 import com.eshop.Ecommerce.Service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class ProductController {
     ProductService productService;
 
     @PostMapping("/admin/categories/{categoryId}/product")
-    public ResponseEntity<ProductDTO>addProduct(@RequestBody ProductDTO productDTO,
+    public ResponseEntity<ProductDTO>addProduct(@Valid  @RequestBody ProductDTO productDTO,
                                                 @PathVariable Long categoryId){
        ProductDTO savedproductDTO= productService.addProduct(categoryId,productDTO);
        return ResponseEntity.ok().body(productDTO);
@@ -45,7 +46,7 @@ public class ProductController {
     }
 
     @PutMapping("/admin/products/{productId}")
-    public ResponseEntity<ProductDTO> updateProduct(@RequestBody ProductDTO productDTO,
+    public ResponseEntity<ProductDTO> updateProduct(@Valid @RequestBody ProductDTO productDTO,
                                                     @PathVariable Long productId){
         ProductDTO updatedProductDTO= productService.updateProduct(productId,productDTO);
         return new ResponseEntity<>(updatedProductDTO, HttpStatus.OK);
