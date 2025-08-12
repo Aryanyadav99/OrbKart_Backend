@@ -8,14 +8,11 @@ import com.eshop.Ecommerce.Payload.ProductResponse;
 import com.eshop.Ecommerce.Repositories.CategoryRepo;
 import com.eshop.Ecommerce.Repositories.ProductRepo;
 import com.eshop.Ecommerce.Service.ProductService;
-import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -29,7 +26,8 @@ public class ProductServiceImpl implements ProductService {
     private ModelMapper modelMapper;
 
     @Override
-    public ProductDTO addProduct(Long CategoryId, Product product) {
+    public ProductDTO addProduct(Long CategoryId, ProductDTO productDTO) {
+        Product product=modelMapper.map(productDTO,Product.class);
         Category category = categoryRepo.findById(CategoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("category","categoryId",CategoryId));
         product.setImage("default.png");
@@ -76,7 +74,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO updateProduct(Long productId, Product product) {
+    public ProductDTO updateProduct(Long productId, ProductDTO productDTO) {
+        Product product=modelMapper.map(productDTO,Product.class);
         // get the product form db
         Product existingproduct=productRepo.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("product","productId",productId));
