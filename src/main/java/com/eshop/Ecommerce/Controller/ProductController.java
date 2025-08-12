@@ -5,6 +5,7 @@ import com.eshop.Ecommerce.Payload.ProductDTO;
 import com.eshop.Ecommerce.Payload.ProductResponse;
 import com.eshop.Ecommerce.Service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,5 +27,11 @@ public class ProductController {
     public ResponseEntity<ProductResponse> getAllProducts(){
         ProductResponse productResponse = productService.getAllProducts();
         return ResponseEntity.ok().body(productResponse);
+    }
+
+    @GetMapping("/public/categories/{categoryId}/products")
+    public ResponseEntity<ProductResponse> getProductByCategory(@PathVariable  Long categoryId){
+        ProductResponse productResponse=productService.searchByCategory(categoryId);
+        return new ResponseEntity<>(productResponse, HttpStatus.OK);
     }
 }

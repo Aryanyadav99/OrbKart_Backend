@@ -8,4 +8,6 @@ public interface ProductService {
     ProductDTO addProduct(Long CategoryId, Product product);
 
     ProductResponse getAllProducts();
+
+    ProductResponse searchByCategory(Long categoryId);
 }
