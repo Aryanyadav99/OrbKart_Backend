@@ -42,6 +42,7 @@ public class User {
 
     @NotBlank
     @Size(max = 120)
+    @Column(name="password")
     private String password;
 
     @Setter
@@ -53,4 +54,9 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
+
+    @OneToMany(mappedBy = "user",
+            cascade = {CascadeType.PERSIST,CascadeType.MERGE},
+            orphanRemoval=true)
+    private Set<Product> products = new HashSet<>();
 }
