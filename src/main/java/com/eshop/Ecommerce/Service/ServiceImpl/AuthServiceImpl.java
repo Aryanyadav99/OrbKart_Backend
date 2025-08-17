@@ -16,6 +16,7 @@ import com.eshop.Ecommerce.Service.AuthService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,6 +30,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+//Note --
+// Cookie + Session → Used in most traditional web apps (e.g., banking sites, e-commerce websites, Django/Express/Spring MVC apps).
+//JWT → Used in mobile apps, SPAs (React, Flutter, Angular), and microservices where stateless auth is preferred.
 
 @Service
 @Transactional
@@ -67,15 +72,16 @@ public class AuthServiceImpl implements AuthService {
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
-        String jwtToken = jwtUtils.generateTokenFromUsername(userDetails.getUsername());
         UserInfoResponse response = new UserInfoResponse(
                 userDetails.getId(),
                 userDetails.getUsername(),
                 roles,
                 userDetails.getEmail(),
-                jwtToken
+                jwtCookie.toString()
         );
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                .body(response);
     }
     //sign in
     @Override
