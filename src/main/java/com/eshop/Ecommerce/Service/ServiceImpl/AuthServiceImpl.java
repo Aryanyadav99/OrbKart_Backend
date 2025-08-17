@@ -134,4 +134,9 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
+    @Override
+    public ResponseCookie logoutUser() {
+        return jwtUtils.getCleanJwtCookie();
+    }
+
 }
