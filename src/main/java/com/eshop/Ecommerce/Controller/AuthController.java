@@ -3,6 +3,8 @@ package com.eshop.Ecommerce.Controller;
 
 import com.eshop.Ecommerce.Security.Request.LoginRequest;
 import com.eshop.Ecommerce.Security.Request.SignupRequest;
+import com.eshop.Ecommerce.Security.Response.UserInfoResponse;
+import com.eshop.Ecommerce.Security.Services.UserDetailsImpl;
 import com.eshop.Ecommerce.Service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -36,6 +40,20 @@ public class AuthController {
             return "";
         }
     }
-
+    @GetMapping("/user")
+    public ResponseEntity<?> getUserDetails(Authentication authentication) {
+        UserDetailsImpl userDetails=(UserDetailsImpl) authentication.getPrincipal();
+                List<String> roles = userDetails.getAuthorities().stream()
+                        .map(item -> item.getAuthority())
+                        .collect(Collectors.toList());
+        UserInfoResponse response = new UserInfoResponse(
+                userDetails.getId(),
+                userDetails.getUsername(),
+                roles,
+                userDetails.getEmail()
+        );
+        return ResponseEntity.ok()
+                .body(response);
+    }
 
 }
