@@ -4,8 +4,6 @@ package com.eshop.Ecommerce.Controller;
 import com.eshop.Ecommerce.Security.Request.LoginRequest;
 import com.eshop.Ecommerce.Security.Request.SignupRequest;
 import com.eshop.Ecommerce.Security.Response.MessageResponse;
-import com.eshop.Ecommerce.Security.Response.UserInfoResponse;
-import com.eshop.Ecommerce.Security.Services.UserDetailsImpl;
 import com.eshop.Ecommerce.Service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
