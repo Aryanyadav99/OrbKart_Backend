@@ -71,6 +71,8 @@ public class User {
     )
     private List<Address> addresses = new ArrayList<>();
 
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
+    private Cart cart;
 
 
     public User(String userName, String email, String password) {
