@@ -1,6 +1,7 @@
 package com.eshop.Ecommerce.Service;
 
 import com.eshop.Ecommerce.Payload.CartDTO;
+import jakarta.transaction.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
@@ -11,4 +12,7 @@ public interface CartService {
     List<CartDTO> getCarts();
 
     CartDTO getCartById(String emailId, Long cartId);
+    @Transactional
+
+    CartDTO updateProductQuantityInCart(Long productId, Integer quantity);
 }
