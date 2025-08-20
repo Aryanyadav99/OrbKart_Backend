@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 public class CartController {
@@ -19,5 +21,10 @@ public class CartController {
                                                     @PathVariable  Integer quantity) {
         CartDTO cartDto=cartService.addProductToCart(productId,quantity);
         return new ResponseEntity<>(cartDto, HttpStatus.CREATED);
+    }
+    @GetMapping("/carts")
+    public ResponseEntity<List<CartDTO>>getCarts(){
+        List<CartDTO> carts=cartService.getCarts();
+        return new ResponseEntity<>(carts, HttpStatus.OK);
     }
 }
