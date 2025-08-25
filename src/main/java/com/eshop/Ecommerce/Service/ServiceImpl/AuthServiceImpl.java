@@ -154,4 +154,6 @@ public class AuthServiceImpl implements AuthService {
                 .body(response);
     }
 
+    public static class AnalyticsServiceImpl {
+    }
 }
