@@ -46,32 +46,36 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Value("${image.base.url}")
+    private String imageBaseUrl;
+
     @Value("${product.image}")
     private String path;
     @Override
-    public ProductDTO addProduct(Long CategoryId, ProductDTO productDTO) {
-        Category category = categoryRepo.findById(CategoryId)
-                .orElseThrow(() -> new ResourceNotFoundException("category","categoryId",CategoryId));
-        boolean isProductNotPresent=true;
-        List<Product> products =category.getProducts();
-        for (Product value : products) {
-            if (value.getProductName().equals(productDTO.getProductName())) {
-                isProductNotPresent = false;
-                break;
-            }
+    public ProductDTO addProduct(Long categoryId, ProductDTO productDTO) {
+        // 1. Get category from DB
+        Category category = categoryRepo.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("category", "categoryId", categoryId));
+
+        // 2. Map DTO -> Entity
+        Product product = modelMapper.map(productDTO, Product.class);
+        product.setCategory(category);
+
+        // 3. Save to DB
+        Product savedProduct = productRepo.save(product);
+
+        // 4. Map back to DTO
+        ProductDTO responseDTO = modelMapper.map(savedProduct, ProductDTO.class);
+
+        // 5. Build full image URL if image is present
+        if (savedProduct.getImage() != null) {
+            responseDTO.setImage(constructImageUrl(savedProduct.getImage()));
         }
-        if(!isProductNotPresent){
-            throw new APIException("Product already present in Category");
-        }
-        else{
-            Product product=modelMapper.map(productDTO,Product.class);
-            product.setImage("default.png");
-            product.setCategory(category);
-            double specialPrice = product.getPrice() - ((product.getPrice() * product.getDiscount()) / 100);
-            product.setSpecialPrice(specialPrice); // assuming this exists
-            Product savedProduct = productRepo.save(product);
-            return modelMapper.map(savedProduct,ProductDTO.class);
-        }
+
+        return responseDTO;
+    }
+    private String constructImageUrl(String imageName) {
+        return imageBaseUrl.endsWith("/") ? imageBaseUrl + imageName : imageBaseUrl + "/" + imageName;
     }
 
     @Override
