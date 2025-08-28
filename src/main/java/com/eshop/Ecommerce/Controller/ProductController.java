@@ -30,12 +30,14 @@ public class ProductController {
 
     @GetMapping("/public/products")
     public ResponseEntity<ProductResponse> getAllProducts(
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "category", required = false) String category,
             @RequestParam(name = "pageNumber",defaultValue = AppConstants.Page_Number ,required = false)Integer pageNumber,
             @RequestParam(name = "pageSize",defaultValue = AppConstants.Page_Size ,required = false) Integer pageSize,
             @RequestParam(name = "sortBy",defaultValue = AppConstants.Sort_ProductsBy ,required = false) String sortBy,
             @RequestParam(name = "sortOrder",defaultValue = AppConstants.Sort_Dir,required = false)  String sortOrder
     ){
-        ProductResponse productResponse = productService.getAllProducts(pageNumber,pageSize,sortBy,sortOrder);
+        ProductResponse productResponse = productService.getAllProducts(pageNumber,pageSize,sortBy,sortOrder, keyword, category);
         return ResponseEntity.ok().body(productResponse);
     }
 
@@ -45,7 +47,7 @@ public class ProductController {
                                                                 @RequestParam(name = "pageSize",defaultValue = AppConstants.Page_Size ,required = false) Integer pageSize,
                                                                 @RequestParam(name = "sortBy",defaultValue = AppConstants.Sort_ProductsBy ,required = false) String sortBy,
                                                                 @RequestParam(name = "sortOrder",defaultValue = AppConstants.Sort_Dir,required = false)  String sortOrder){
-        ProductResponse productResponse=productService.searchByCategory(categoryId,pageNumber,pageSize,sortBy,sortOrder);
+        ProductResponse productResponse = productService.searchByCategory(categoryId, pageNumber, pageSize, sortBy, sortOrder);
         return new ResponseEntity<>(productResponse, HttpStatus.OK);
     }
 
