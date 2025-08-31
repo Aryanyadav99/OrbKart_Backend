@@ -63,7 +63,7 @@ public class JwtUtils {
     //get the clean usable cookie --for sign_out endpoint
     public ResponseCookie getCleanJwtCookie() {
         ResponseCookie cookie = ResponseCookie.from(jwtCookie, null)
-                .path("/api")
+
                 .build();
         return cookie;
     }
