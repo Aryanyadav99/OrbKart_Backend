@@ -6,6 +6,7 @@ import com.eshop.Ecommerce.Payload.CartItemDTO;
 import com.eshop.Ecommerce.Repositories.CartRepository;
 import com.eshop.Ecommerce.Service.CartService;
 import com.eshop.Ecommerce.Util.AuthUtil;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,7 @@ public class CartController {
         List<CartDTO> carts=cartService.getCarts();
         return new ResponseEntity<>(carts, HttpStatus.OK);
     }
+    @Transactional
     @PostMapping("/cart/create")
     public ResponseEntity<String> createOrUpdateCart(@RequestBody List<CartItemDTO> cartItems){
         String response = cartService.createOrUpdateCartWithItems(cartItems);

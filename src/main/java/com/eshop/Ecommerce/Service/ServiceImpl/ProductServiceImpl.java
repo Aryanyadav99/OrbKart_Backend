@@ -100,7 +100,7 @@ public class ProductServiceImpl implements ProductService {
 
         Page<Product> pageProducts = productRepo.findAll(spec, pageDetails);
 
-        List<Product> products = productPage.getContent();
+        List<Product> products = pageProducts.getContent();
         if(products.isEmpty()){
             throw  new APIException("Not any products present");
         }

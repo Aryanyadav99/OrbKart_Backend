@@ -19,7 +19,7 @@ import java.util.List;
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long addressid;
+    private Long addressId;
 
     @NotBlank
     @Size(min=5 ,message = "Street name must be atleast 5 characters")
