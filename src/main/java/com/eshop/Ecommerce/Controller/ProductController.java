@@ -82,4 +82,14 @@ public class ProductController {
         ProductDTO updatedProduct=productService.updateProductImage(productId,image);
         return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
     }
+    @GetMapping("/admin/products")
+    public ResponseEntity<ProductResponse> getAllProductsForAdmin(
+            @RequestParam(name = "pageNumber", defaultValue = AppConstants.Page_Number, required = false) Integer pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = AppConstants.Page_Size, required = false) Integer pageSize,
+            @RequestParam(name = "sortBy", defaultValue = AppConstants.Sort_ProductsBy, required = false) String sortBy,
+            @RequestParam(name = "sortOrder", defaultValue = AppConstants.Sort_Dir, required = false) String sortOrder
+    ){
+        ProductResponse productResponse = productService.getAllProductsForAdmin(pageNumber, pageSize, sortBy, sortOrder);
+        return new ResponseEntity<>(productResponse,HttpStatus.OK);
+    }
 }
