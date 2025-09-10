@@ -92,4 +92,27 @@ public class ProductController {
         ProductResponse productResponse = productService.getAllProductsForAdmin(pageNumber, pageSize, sortBy, sortOrder);
         return new ResponseEntity<>(productResponse,HttpStatus.OK);
     }
+    @GetMapping("/seller/products")
+    public ResponseEntity<ProductResponse> getAllProductsForSeller(
+            @RequestParam(name = "pageNumber", defaultValue = AppConstants.Page_Number, required = false) Integer pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = AppConstants.Page_Size, required = false) Integer pageSize,
+            @RequestParam(name = "sortBy", defaultValue = AppConstants.Sort_ProductsBy, required = false) String sortBy,
+            @RequestParam(name = "sortOrder", defaultValue = AppConstants.Sort_Dir, required = false) String sortOrder
+    ){
+        ProductResponse productResponse = productService.getAllProductsForSeller(pageNumber, pageSize, sortBy, sortOrder);
+        return new ResponseEntity<>(productResponse,HttpStatus.OK);
+    }
+    @PutMapping("/seller/products/{productId}")
+    public ResponseEntity<ProductDTO> updateSellersProduct(@Valid @RequestBody ProductDTO productDTO,
+                                                    @PathVariable Long productId){
+        ProductDTO updatedProductDTO= productService.updateSellersProduct(productId,productDTO);
+        return new ResponseEntity<>(updatedProductDTO, HttpStatus.OK);
+
+    }
+    @PostMapping("/seller/categories/{categoryId}/product")
+    public ResponseEntity<ProductDTO>addSellersProduct(@Valid  @RequestBody ProductDTO productDTO,
+                                                @PathVariable Long categoryId){
+        ProductDTO savedproductDTO= productService.addProduct(categoryId,productDTO);
+        return ResponseEntity.ok().body(productDTO);
+    }
 }

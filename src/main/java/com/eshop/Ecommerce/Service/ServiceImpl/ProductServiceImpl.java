@@ -5,6 +5,7 @@ import com.eshop.Ecommerce.Exception.ResourceNotFoundException;
 import com.eshop.Ecommerce.Model.Cart;
 import com.eshop.Ecommerce.Model.Category;
 import com.eshop.Ecommerce.Model.Product;
+import com.eshop.Ecommerce.Model.User;
 import com.eshop.Ecommerce.Payload.CartDTO;
 import com.eshop.Ecommerce.Payload.ProductDTO;
 import com.eshop.Ecommerce.Payload.ProductResponse;
@@ -264,6 +265,70 @@ public class ProductServiceImpl implements ProductService {
         return productResponse;
     }
 
+    @Override
+    public ProductResponse getAllProductsForSeller(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
+        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+
+        User user=authUtil.loggedInUser();
+        Page<Product> pageProducts = productRepo.findByUser(user,pageDetails);
+
+        List<Product> products = pageProducts.getContent();
+
+        List<ProductDTO> productDTOS = products.stream()
+                .map(product -> {
+                    ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
+                    productDTO.setImage(constructImageUrl(product.getImage()));
+                    return productDTO;
+                })
+                .toList();
+
+        ProductResponse productResponse = new ProductResponse();
+        productResponse.setProducts(productDTOS);
+        productResponse.setPageNumber(pageProducts.getNumber());
+        productResponse.setPageSize(pageProducts.getSize());
+        productResponse.setTotalElements(pageProducts.getTotalElements());
+        productResponse.setTotalPages(pageProducts.getTotalPages());
+        productResponse.setLastPage(pageProducts.isLast());
+        return productResponse;
+    }
+
+    @Override
+    public ProductDTO updateSellersProduct(Long productId, ProductDTO productDTO) {
+        Product product=modelMapper.map(productDTO,Product.class);
+        // get the product form db
+        Product existingproduct=productRepo.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("product","productId",productId));
+        //update the product info with new product
+        existingproduct.setProductName(product.getProductName());
+        existingproduct.setDescription(product.getDescription());
+        existingproduct.setQuantity(product.getQuantity());
+        existingproduct.setDiscount(product.getDiscount());
+        existingproduct.setPrice(product.getPrice());
+        existingproduct.setSpecialPrice(product.getSpecialPrice());
+        // save to db
+        Product savedProduct=productRepo.save(existingproduct);
+        List<Cart> carts = cartRepository.findCartsByProductId(productId);
+
+        List<CartDTO> cartDTOs = carts.stream().map(cart -> {
+            CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
+
+            List<ProductDTO> products = cart.getCartItems().stream()
+                    .map(p -> modelMapper.map(p.getProduct(), ProductDTO.class)).collect(Collectors.toList());
+
+            cartDTO.setProducts(products);
+
+            return cartDTO;
+
+        }).toList();
+
+        cartDTOs.forEach(cart -> cartService.updateProductInCarts(cart.getCartId(), productId));
+
+        return modelMapper.map(savedProduct, ProductDTO.class);
+    }
     private String uploadImage(String path, MultipartFile file) throws IOException {
         //file names of original file
         String originalFilename = file.getOriginalFilename();
