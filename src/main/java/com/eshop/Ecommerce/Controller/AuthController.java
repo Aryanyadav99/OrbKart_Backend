@@ -1,12 +1,16 @@
 package com.eshop.Ecommerce.Controller;
 
 
+import com.eshop.Ecommerce.Configuration.AppConstants;
 import com.eshop.Ecommerce.Security.Request.LoginRequest;
 import com.eshop.Ecommerce.Security.Request.SignupRequest;
 import com.eshop.Ecommerce.Security.Response.MessageResponse;
 import com.eshop.Ecommerce.Service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -50,6 +54,15 @@ public class AuthController {
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,
                         cookie.toString())
                 .body(new MessageResponse("You've been signed out!"));
+    }
+
+    @GetMapping("/seller")
+    public ResponseEntity<?> getAllSeller(
+            @RequestParam(name = "pageNumber" , defaultValue = AppConstants.Page_Number, required = false) Integer pageNumber
+    ) {
+        Sort sortByAndOrder=Sort.by(AppConstants.SORT_USERS_BY).descending();
+        Pageable pageDetails= PageRequest.of(pageNumber,Integer.parseInt(AppConstants.Page_Size),sortByAndOrder);
+        return ResponseEntity.ok(authService.getAllSellers(pageDetails));
     }
 
 }

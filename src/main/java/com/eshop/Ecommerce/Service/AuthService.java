@@ -19,4 +19,6 @@ public interface AuthService {
     ResponseCookie logoutUser();
 
     ResponseEntity<?> getUserDetail(Authentication authentication);
+
+    Object getAllSellers(Pageable pageDetails);
 }
