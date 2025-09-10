@@ -61,6 +61,7 @@ public class OrderController {
         return new ResponseEntity<OrderResponse>(orderResponse, HttpStatus.OK);
     }
 
+    //endpoint : orders for seller products
     @GetMapping("/seller/orders")
     public ResponseEntity<OrderResponse> getAllSellerOrders(
             @RequestParam(name = "pageNumber", defaultValue = AppConstants.Page_Number, required = false) Integer pageNumber,

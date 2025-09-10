@@ -13,6 +13,7 @@ import com.eshop.Ecommerce.Repositories.CategoryRepo;
 import com.eshop.Ecommerce.Repositories.ProductRepo;
 import com.eshop.Ecommerce.Service.CartService;
 import com.eshop.Ecommerce.Service.ProductService;
+import com.eshop.Ecommerce.Util.AuthUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,6 +47,8 @@ public class ProductServiceImpl implements ProductService {
     private CategoryRepo categoryRepo;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private AuthUtil authUtil;
 
     @Value("${image.base.url}")
     private String imageBaseUrl;
@@ -61,6 +64,7 @@ public class ProductServiceImpl implements ProductService {
         // 2. Map DTO -> Entity
         Product product = modelMapper.map(productDTO, Product.class);
         product.setCategory(category);
+        product.setUser(authUtil.loggedInUser());
 
         // 3. Save to DB
         Product savedProduct = productRepo.save(product);

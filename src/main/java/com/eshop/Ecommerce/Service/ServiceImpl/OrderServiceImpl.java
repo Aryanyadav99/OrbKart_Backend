@@ -149,6 +149,7 @@ public class OrderServiceImpl implements OrderService {
         return modelMapper.map(order, OrderDTO.class);
     }
 
+    // get all seller orders for seller panel :>
     @Override
     public OrderResponse getAllSellerOrders(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
         Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc")
